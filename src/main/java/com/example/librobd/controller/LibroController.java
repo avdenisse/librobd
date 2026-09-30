@@ -44,7 +44,7 @@ public class LibroController {
     private final ObservableList<Libro> listaLibros = FXCollections.observableArrayList();
 
     @FXML
-    public void Initialize(){
+    public void initialize(){
         configurarTabla();
         configurarComboBox();
         actualizar();
@@ -96,10 +96,11 @@ public class LibroController {
             return;
         }
         //consulta SQL a ejecutar
-        String sql = "INSERT INTO libro(titulo, autor,categoria, precio, stock) VALUES(?,?,?,?,?)";
+        String sql = "INSERT INTO libro(titulo, autor,categoria, precio, stock) " + "VALUES(?,?,?,?,?)";
         try(
                 Connection connection = DatabaseConnection.getConnection();
                 PreparedStatement statement = connection.prepareStatement(sql);
+
 
 
                 ) {
@@ -108,6 +109,7 @@ public class LibroController {
             statement.setString(3, cmbCategoria.getValue());
             statement.setDouble(4, Double.parseDouble(txtPrecio.getText()));
             statement.setInt(5, Integer.parseInt(txtStock.getText()));
+            statement.execute();
 
             mostrarAlerta(
                     Alert.AlertType.INFORMATION,
@@ -131,6 +133,12 @@ public class LibroController {
         alert.setContentText(mensaje);
     }
     @FXML
-    public void limpiar(ActionEvent actionEvent){}
+    public void limpiar(ActionEvent actionEvent){
+        txtTitulo.setText("");
+        txtAutor.setText("");
+        txtPrecio.setText("");
+        txtStock.setText("");
+        cmbCategoria.getSelectionModel().clearSelection();
+    }
 
 }
